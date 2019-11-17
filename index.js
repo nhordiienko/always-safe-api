@@ -16,9 +16,9 @@ const admins = [
 
 express()
 .use(cors())
-.get('/adminLog/', function(req, res){
-  const name = req.query.name;
-  const pass = req.query.pass;
+.post('/adminLog/', function(req, res){
+  const name = req.body.name;
+  const pass = req.body.pass;
 
   if (!name || !name.match(/[a-zA-Z]/)) {
     const result = {
