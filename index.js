@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 //app.get()
 //app.post()
 //app.put()
@@ -14,6 +15,7 @@ const admins = [
 ];
 
 express()
+.use(cors())
 .get('/adminLog/', function(req, res){
   const name = req.query.name;
   const pass = req.query.pass;
