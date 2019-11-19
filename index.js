@@ -67,7 +67,7 @@ express()
   }
 })
 .get('/getTime', (req, res) => {
-  const str = req.query.text;
+  const str = req.query.algor;
   const foo = new Function('temp', 'hum', str);
   const time = foo(10, 10);
   res.send(time.toString());
