@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const Time = require('./modules/Time.js');
 //app.get()
 //app.post()
 //app.put()
@@ -15,6 +16,7 @@ const admins = [
 ];
 
 express()
+//.use(express.json())
 .use(cors())
 .post('/adminLog/', function(req, res){
   const name = req.body.name;
@@ -63,6 +65,12 @@ express()
     }
     res.status(404).send(result);
   }
+})
+.get('/getTime', (req, res) => {
+  const str = req.query.text;
+  const foo = new Function('temp', 'hum', str);
+  const time = foo(10, 10);
+  res.send(time.toString());
 })
 
 .listen(port, () => console.log(`listening on port ${port}...`));
