@@ -20,7 +20,8 @@ exports.users_get_all = (req, res, next) => {
             password: doc.pass,
             age: doc.age,
             placeOfBirth: doc.placeOfBirth,
-            curLocation: doc.curLocation,
+            latitude: doc.latitude,
+            longitude: doc.longitude,
             request: {
               type: 'GET',
               url: "http://localhost:3000/users/" + doc._id
@@ -112,7 +113,8 @@ exports.users_signup = (req, res, next) => {
               pass: hash,
               age: req.body.age,
               placeOfBirth: req.body.placeOfBirth,
-              curLocation: req.body.curLocation
+              latitude: req.query.latitude,
+              longitude: req.query.longitude
             });
           user.save()
           .then(result => {

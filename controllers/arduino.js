@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Arduino = require('../models/arduino');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+const Group = require('../models/group');
 
 exports.arduino_get_all = (req, res, next) => {
   Arduino.find()
@@ -93,30 +93,54 @@ exports.arduino_update = (req, res, next) => {
   });
 }
 
+
 exports.get_by_location = (req, res, next) => {
-  const lat = parseFloat(req.query.latitude);
-  const long = parseFloat(req.query.longitude);
-  const d = 3;
-  Arduino.find( {latitude: {$gte: lat - d, $lte: lat + d}, longitude: {$gte: long - d, $lte: long + d}})
+  id = req.query.userId;
+  User.findOne ({_id: id})
   .exec()
-  .then(arduino => {
-    if (!arduino) {
+  .then(user => {
+    if (!user) {
       return res.status(404).json({
-        message: 'Arduino in range not found'
+        message: "User not found"
       });
     }
     else {
-      const response = {
-        sensors: arduino.map(doc => {
-          return {
-            id: doc._id,
-            latitude: doc.latitude,
-            longitude: doc.longitude,
-            temperature: doc.temperature
+      const groupId = user.groupId;
+      Group.find({ groupId: groupId})
+      .exec()
+      .then()
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
+
+      const lat = parseFloat(user.latitude);
+      const long = parseFloat(user.longitude);
+      console.log({lat, long});
+      const d = 3;
+      Arduino.findOne({ latitude: { $gte: lat - d, $lte: lat + d}, longitude: {$gte: long - d, $lte: long + d }})
+      .exec()
+      .then(arduino => {
+        if (!arduino) {
+          return res.status(404).json({
+            message: 'Arduino in range not found'
+          });
+        }
+        else {
+          const response = {
+            sensors: arduino
           }
-        })
-      }
-      res.json(response);
+          res.json(response);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(500).json({
+          error: err
+        });
+      });
     }
   })
   .catch(err => {
@@ -125,4 +149,7 @@ exports.get_by_location = (req, res, next) => {
       error: err
     });
   });
+  // const lat = parseFloat(req.query.latitude);
+  // const long = parseFloat(req.query.longitude);
+
 }

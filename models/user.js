@@ -12,7 +12,8 @@ const userSchema = mongoose.Schema({
   pass: { type: String, required: true },
   age: { type: Number, required: true, min: 5, max: 120, default: 18 },
   placeOfBirth: String,
-  curLocation: { type: String, required: true },
+  latitude: Number,
+  longitude: Number,
   groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' }
 });
 
