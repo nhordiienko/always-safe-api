@@ -130,6 +130,8 @@ exports.get_by_location = (req, res, next) => {
               console.log(d);
               const algText = doc.text;
               console.log(algText);
+              //GOT FUNCTION
+              const algFunction = new Function('temperature', 'humidity', 'pressure', 'O2content', 'CO2content', 'infrasound', algText);
               Arduino.findOne({ latitude: { $gte: lat - d, $lte: lat + d}, longitude: {$gte: long - d, $lte: long + d }})
               .exec()
               .then(arduino => {
@@ -139,8 +141,11 @@ exports.get_by_location = (req, res, next) => {
                   });
                 }
                 else {
+                  //ТАК СО ВСЕМИ ЗНАЧЕНИЯМИ
+                  const temperature = arduino.temperature;
                   const response = {
-                    sensors: arduino
+                    //Добавить параметры
+                    result: algFunction(temperature)
                   }
                   res.json(response);
                 }

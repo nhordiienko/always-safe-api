@@ -61,7 +61,7 @@ exports.admins_login = (req, res, next) => {
         const token = jwt.sign(
           {
             name: admin[0].name,
-            adminId: admin[0].adminId
+            adminId: admin[0]._id
           },
           process.env.JWT_KEY,
           {
@@ -70,7 +70,8 @@ exports.admins_login = (req, res, next) => {
         );
         return res.status(200).json({
           message: 'Auth successful',
-          token: token
+          token: token,
+          id: admin[0]._id
         });
       }
         return res.status(401).json({

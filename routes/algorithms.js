@@ -10,7 +10,7 @@ const AlgController =  require('../controllers/algorithms');
 router.get('/', AlgController.algoritms_get_all);
 
 //add new algo
-router.post('/', checkAuth, AlgController.add_algo);
+router.post('/', AlgController.add_algo);
 
 //get alg by its ID
 router.get('/:algorithmId', AlgController.get_algo);
