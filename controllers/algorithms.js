@@ -60,7 +60,6 @@ exports.add_algo = (req, res, next) => {
       });
       algorithm.save()
       .then(result => {
-        console.log(result);
         return res.status(201).json(result);
         })
       .catch(err => {
@@ -108,7 +107,6 @@ exports.patch_algo = (req, res, next) => {
   Algorithm.update({_id: id}, {$set: updateOps})
   .exec()
   .then(result => {
-    console.log(result);
     res.status(200).json({
       message: "Algorithm updated",
       request: {

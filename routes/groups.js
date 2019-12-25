@@ -8,12 +8,12 @@ const GroupController =  require('../controllers/groups');
 router.get('/', GroupController.groups_get_all);
 
 //add new group
-//router.post('/', GroupController.add_group);
+router.post('/', GroupController.add_group);
 
 //get group by id
-//router.get('/:groupId', GroupController.add_group);
+router.get('/:groupId', GroupController.getById_group);
 
-//delete group
-//router.post('/delete/:groupId', GroupController.delete_group);
+//update group
+router.post('/update/:groupId', GroupController.update_group);
 
 module.exports = router;

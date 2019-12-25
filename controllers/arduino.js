@@ -105,35 +105,61 @@ exports.get_by_location = (req, res, next) => {
       });
     }
     else {
-      const groupId = user.groupId;
-      Group.find({ groupId: groupId})
-      .exec()
-      .then()
-      .catch(err => {
-        console.log(err);
-        res.status(500).json({
-          error: err
-        });
-      });
-
       const lat = parseFloat(user.latitude);
       const long = parseFloat(user.longitude);
-      console.log({lat, long});
-      const d = 3;
-      Arduino.findOne({ latitude: { $gte: lat - d, $lte: lat + d}, longitude: {$gte: long - d, $lte: long + d }})
+      const groupId = user.groupId;
+      Group.findOne({ _id: groupId})
       .exec()
-      .then(arduino => {
-        if (!arduino) {
-          return res.status(404).json({
-            message: 'Arduino in range not found'
-          });
+      .then(group => {
+        let algId;
+        if (!group) {
+          //use default alg (with ID)
+          algId = 10;
         }
         else {
-          const response = {
-            sensors: arduino
-          }
-          res.json(response);
+          algId = group.algorithmId;
         }
+        Algorithm.findOne({_id:algId})
+        .exec()
+        .then( doc => {
+            if (!doc) {
+              console.log('No algorithm');
+            }
+            else {
+              const d = process.env.LOCATION_DELTA;
+              console.log(d);
+              const algText = doc.text;
+              console.log(algText);
+              Arduino.findOne({ latitude: { $gte: lat - d, $lte: lat + d}, longitude: {$gte: long - d, $lte: long + d }})
+              .exec()
+              .then(arduino => {
+                if (!arduino) {
+                  return res.status(404).json({
+                    message: 'Arduino in range not found'
+                  });
+                }
+                else {
+                  const response = {
+                    sensors: arduino
+                  }
+                  res.json(response);
+                }
+              })
+              .catch(err => {
+                console.log(err);
+                res.status(500).json({
+                  error: err
+                });
+              });
+            }
+        }
+        )
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({
+            error: err
+          });
+        });
       })
       .catch(err => {
         console.log(err);
@@ -149,7 +175,4 @@ exports.get_by_location = (req, res, next) => {
       error: err
     });
   });
-  // const lat = parseFloat(req.query.latitude);
-  // const long = parseFloat(req.query.longitude);
-
 }
