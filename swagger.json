@@ -1,0 +1,81 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Always Safe API",
+        "description": "An API for the project"
+    },
+    "schemes": [
+            "arduino", "admin", "group", "user", "algorithm"
+        ],
+        "host": "alwayssafe.api",
+    "basePath": "/",
+    "paths": {
+        "/arduino/getByLoc/:userId": {
+            "get": {
+                "summary": "Gets IoT devices",
+                "consumes": "application/json",
+                "description": "Returns a list containing all arduino devices with environmental data.",
+                "parameters": [
+                    {
+                      "userId": "username",
+                      "in": "query",
+                      "description": "The ID of the user",
+                      "required": true,
+                      "type": "string"
+                    }
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A list of Arduino",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "properties": {
+                                    "latitude": {
+                                      "type": "number"
+                                    },
+                                    "longitude":{
+                                      "type": "number"
+                                    },
+                                    "temperature": {
+                                        "type": "number"
+                                    },
+                                    "humidity": {
+                                        "type": "number"
+                                    },
+                                    "pressure": {
+                                        "type": "number"
+                                    },
+                                    "O2content": {
+                                      "type": "number"
+                                    },
+                                    "CO2content": {
+                                      "type": "number"
+                                    },
+                                    "infrasound": {
+                                      "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                      "description": "Something not found",
+                      "schema": {
+                        "type": "array",
+                        "items": {
+                          "message": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                }
+            }
+        }
+    }
+}

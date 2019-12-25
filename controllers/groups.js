@@ -8,15 +8,23 @@ exports.groups_get_all = (req, res, next) => {
   Group.find()
   .exec()
   .then(docs => {
-    const response = {
-      count: docs.length,
-      groups: docs.map(doc => {
-        return {
-          id: doc._id,
-          name: doc.name,
-          algorithm: doc.algorithmId
+      const response = {
+        count: docs.length,
+        groups: docs.map(doc => {
+          return {
+            id: doc._id,
+            name: doc.name,
+            algorithm: doc.algorithmId
+        }
+      })
       }
-    })
+    if (docs.length > 0) {
+      res.status(200).json(response);
+    }
+    else {
+      return res.status(200).json({
+        message: 'No groups found'
+      });
     }
   })
   .catch(err => {

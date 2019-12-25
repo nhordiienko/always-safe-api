@@ -11,10 +11,14 @@ const groupRoutes = require('./routes/groups');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const sha256 = require('sha256');
+var swaggerUi = require('swagger-ui-express'),
+    swaggerDocument = require('./swagger.json');
 //additional
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+//app.use('/api/v1', router);
 
 //prevent CORS errors
 app.use((req, res, next) => {

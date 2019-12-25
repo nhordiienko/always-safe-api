@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const Arduino = require('../models/arduino');
+const Algorithm = require('../models/algorithm');
 const User = require('../models/user');
 const Group = require('../models/group');
 
@@ -113,8 +114,7 @@ exports.get_by_location = (req, res, next) => {
       .then(group => {
         let algId;
         if (!group) {
-          //use default alg (with ID)
-          algId = 10;
+          algId = '5dee10cb239bb9173ecda8fb';
         }
         else {
           algId = group.algorithmId;
